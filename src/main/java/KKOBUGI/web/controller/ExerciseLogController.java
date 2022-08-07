@@ -46,8 +46,15 @@ public class ExerciseLogController {
     /*수정
      * ok*/
     //입력: content, detailLog, number
-    @PatchMapping("calendar/{date}/{exerciseLogId}")
-    public ExerciseLogDto.ExerciseLogResponseDto updateExerciseLog(@PathVariable int date, @PathVariable Long exerciseLogId
+//    @PatchMapping("calendar/{date}/{exerciseLogId}")
+//    public ExerciseLogDto.ExerciseLogResponseDto updateExerciseLog(@PathVariable int date, @PathVariable Long exerciseLogId
+//            , @RequestBody ExerciseLog exerciseLog) {
+//        ExerciseLogDto.ExerciseLogResponseDto updatedExerciseLogDto = exerciseLogService.updateExerciseLog(exerciseLogId, exerciseLog.getContent(),
+//                exerciseLog.getDetailLog(), exerciseLog.getNumber());
+//        return updatedExerciseLogDto;
+//    }
+    @PatchMapping("calendar/{exerciseLogId}")
+    public ExerciseLogDto.ExerciseLogResponseDto updateExerciseLog(@PathVariable Long exerciseLogId
             , @RequestBody ExerciseLog exerciseLog) {
         ExerciseLogDto.ExerciseLogResponseDto updatedExerciseLogDto = exerciseLogService.updateExerciseLog(exerciseLogId, exerciseLog.getContent(),
                 exerciseLog.getDetailLog(), exerciseLog.getNumber());

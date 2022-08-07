@@ -2,51 +2,41 @@ import React, { useState , useRef , useEffect} from 'react';
 import moment from 'moment';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import styled from "styled-components";
 import axios from "axios";
 
 import StopWatch from '../function/StopWatch.js';
 import List from '../function/Accordion';
 import Layout from '../common/Layout';
 
+export const dateFormat = (date) => {
+    return moment(date).format('YYYYMMDD');
+}
+
 const MainPage=()=>{
-    
-    
-    const [questions , setQuestions] = useState([
-        {
-            id: 1,
-            tit: '운동1',
-            subTit:'100kg',
-            count: '15'
-        },
-        {
-            id: 2,
-            tit: '운동2',
-            subTit:'15m',
-            count: '200'
-        },
-        {
-            id: 3,
-            tit: '운동3',
-            subTit:'1kg',
-            count: '100'
-        },
-        {
-            id: 4,
-            tit: '운동4',
-            subTit:'50kg',
-            count: '5'
-        }
-    ]);
+    const [questions , setQuestions] = useState([]);
 
     const [date, setDate] = useState();
-    const nextId = useRef(5);
+    const id = '1'; //아이디 값 현재 임의로 둠.
+    
+    useEffect(()=>{
+        axios.get(`/calendar/${dateFormat(date)}/${id}`)
+        .then((res) => {
+        setQuestions('');
+        console.log(questions);
+            setQuestions(res.data);
+        })
+    }, [date]);
+
+   const nextId = useRef(questions.length + 1);
 
     const onCreate = () => {
+    console.log(nextId.current);
         const question = {
-            id: nextId.current,
-            tit: '',
-            subTit:'',
-            count: '0'
+            exerciseLogId : nextId.current,
+            content: '',
+            detailLog:'',
+            number: '0'
         }
 
         setQuestions([...questions , question]);
@@ -55,64 +45,123 @@ const MainPage=()=>{
 
     const getValue = () => {
         const list = document.querySelectorAll('.list > div');
-        var i = 1;
         var listArr = [];
         
         list.forEach((item) => {
             var obj = new Object();
 
-            obj.id = i;
-            obj.tit = item.querySelector('.main-tit').value;
-            obj.subTit = item.querySelector('.sub-tit').value;
-            obj.count = item.querySelector('.ex-count').value;
+            obj.exerciseLogId = item.id;
+            obj.content   = item.querySelector('.main-tit').value;
+            obj.detailLog = item.querySelector('.sub-tit').value;
+            obj.number    = item.querySelector('.ex-count').value;
 
             listArr.push(obj);
-
-            i++
         });
 
         return listArr;
     }
 
     const saveList = () => {
-        const param = {
-            "date" :  document.getElementById('date').value,
-            "time" :  date, 
-            "list" :  getValue()
+    /*console.log("12");*/
+        const time = document.querySelectorAll('.digits')[0].innerText
+                    + document.querySelectorAll('.digits')[1].innerText;
+ const param = {
+        	"userId" : '1',
+        	"date"  : document.getElementById('date').value,
+        	"time"   : time,
+        	"content" : document.querySelector('.main-tit').value,
+        	"detailLog" : document.querySelector('.sub-tit').value,
+        	"number" : document.querySelector('.ex-count').value
         }
-
-        console.log(param);
+/*const param = {
+            "userId" : id,
+            "date" :  document.getElementById('date').value,
+            "time" :  time,
+            "list" :  getValue()
+        }*/
+        axios.post(`/calendar/${dateFormat(date)}` , param)
+        .then((res) => {
+         alert("저장되었습니다.");
+        })
     }
 
     return(
         <>
         <Layout>
-            <div className="container">
-                <div className="wrapper">
-                    <Calendar 
-                        onChange={setDate} 
-                        value={date} 
-                        formatDay={(locale, date) => date.toLocaleString("en", {day: "numeric"})}/>
+            <Main>
+                <div className="container">
+                    <div className="wrapper">
+                        <Calendar
+                            onChange={setDate}
+                            value={date}
+                            formatDay={(locale, date) => date.toLocaleString("en", {day: "numeric"})}/>
 
-                    <div className="today-wrap">
-                        <input type="hidden" id="date" value={moment(date).format("YYYY년 MM월 DD일")} ></input>
-                        <StopWatch />
+                        <div className="today-wrap">
+                            <input type="hidden" id="date" value={moment(date).format("YYYYMMDD")} ></input>
+                            <StopWatch />
+                        </div>
                     </div>
-                </div>
 
-                <div id="Accorion">
-                    <button type="button" className="add-list" onClick={onCreate}>
-                        추가하기
-                        <span className="material-symbols-outlined">playlist_add</span>
-                    </button>    
-                    <List data={questions}/>
-                </div>
+                    <div id="Accorion">
+                        <button type="button" className="add-list" onClick={onCreate}>
+                            추가하기
+                            <span className="material-symbols-outlined">playlist_add</span>
+                        </button>
+                        <List data={questions}/>
+                    </div>
 
-                <button type="button" className="save-list" onClick={saveList}>저장하기</button>                
-            </div>
+                    <button type="button" className="save-list" onClick={saveList}>저장하기</button>                
+                </div>
+            </Main>
         </Layout>
         </>
     )
 }
 
+const Main=styled.div`
+    .today-wrap{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin:20px 0 40px;
+    }
+
+    button.add-list{
+        background-color: #dee4f1;
+        color: #333;
+        border: none;
+        display: inline-block;
+        padding: 10px 20px 10px 45px;
+        border-radius: 10px;
+        box-shadow: 0 0 0 1.5px #dee4f1, 0px 5px 13px 0px #dee4f1;
+        text-decoration: none;
+        font-weight: 600;
+        transition: 0.25s;
+        position: relative;
+        float: right;
+        margin: 0 20px 10px;
+    }
+
+    button.add-list > span{
+        position: absolute;
+        top:50%;
+        left:15px;
+        transform: translateY(-50%);
+    }
+
+    button.save-list{
+        background-color: #FE6229;
+        color: #fff;
+        border: none;
+        display: block;
+        padding: 10px 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 0 1.5px #dee4f1, 0px 5px 13px 0px #dee4f1;
+        text-decoration: none;
+        font-weight: 600;
+        transition: 0.25s;
+        width:115px;
+        margin:30px auto 0;
+    }
+`
 export default MainPage;

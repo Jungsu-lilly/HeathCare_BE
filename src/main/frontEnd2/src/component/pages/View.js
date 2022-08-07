@@ -7,19 +7,19 @@ import axios from "axios";
 import styled from "styled-components";
 
 const View = ()=>{
-    let navigate = useNavigate()
-    const {id}=useParams()
-    const [contents,setContents]=useState({
-        userId:'',
-        content:'',
-        title:'',
-    })
-
-    const onRemove=(id)=>{
-        axios.delete(`/board/${id}`)
-        navigate('/board')
-    }
-
+        let navigate = useNavigate()
+        const {id}=useParams()
+        const [contents,setContents]=useState({
+            userId:'',
+            content:'',
+            title:'',
+        })
+    
+        const onRemove=(id)=>{
+            axios.delete(`/board/${id}`)
+            navigate('/board')
+        }
+        
     useEffect(()=>{
         const viewNow=async()=>{
             const response = await axios.get(`/board/${id}`)
@@ -28,17 +28,17 @@ const View = ()=>{
                 content:response.data.content,
                 title:response.data.title,}
             )
-
+            
         }
         viewNow()
     },[id])
 
-
+    
     const onChange = (e)=>{
         const {name,value}=e.target
         setContents({...contents,
-                [name]:value
-            }
+            [name]:value
+        }
         )
     }
     const reNew=()=>{
@@ -49,24 +49,23 @@ const View = ()=>{
         })
         navigate('/board')
     }
-
-
+   
 
     return(
         <>
-            <Layout>
-                <Title>
-                    <input placeholder="이름" value={contents.title} onChange={onChange} name='title'/>
-                    <input placeholder="작성자" value={contents.userId} onChange={onChange} name='userId'/>
-                    <button onClick={()=>{onRemove(id)}}>삭제</button>
-                    <button onClick={reNew}>여기서수정</button>
-                </Title>
-                <Body>
-                    <textarea cols='50' rows='10' placeholder="내용" value={contents.content} onChange={onChange} name='body'></textarea>
-                </Body>
-                <Comment id={id}/>
+        <Layout>
+            <Title>
+                <input placeholder="이름" value={contents.title} onChange={onChange} name='title'/>
+                <input placeholder="작성자" value={contents.userId} onChange={onChange} name='userId'/> 
+                <button onClick={()=>{onRemove(id)}}>삭제</button>
+                <button onClick={reNew}>여기서수정</button>
+            </Title>
+            <Body>
+                <textarea cols='50' rows='10' placeholder="내용" value={contents.content} onChange={onChange} name='body'></textarea>
+            </Body>
+            <Comment id={id}/>
 
-            </Layout>
+        </Layout>
         </>
     )
 }

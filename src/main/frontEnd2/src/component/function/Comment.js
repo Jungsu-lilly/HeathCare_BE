@@ -1,4 +1,4 @@
-import React,{ useEffect,useState} from "react";
+import React,{ useEffect,useState,useCallback} from "react";
 import axios from "axios"
 import styled from "styled-components"
 
@@ -8,6 +8,7 @@ const Comment=({id})=>{
         content:'',
         userNickname:'',
     })
+    
 
     const [cmList,setCmList]=useState([])
 
@@ -20,18 +21,30 @@ const Comment=({id})=>{
         })
     }
     const onPost=()=>{
-        //   console.log(`/board/${id}`);
+     //   console.log(`/board/${id}`);
     }
 
+    const loadComments= useCallback( async()=>{
+        const response = await axios.get(`/board/${id}`)
+        const commentDtoList = response.data.commentDtoList
+        console.log(commentDtoList)
+        setCmList([commentDtoList,...cmList])
+    },[cmList,id])
+
     useEffect(()=>{
-        const loadComments= async()=>{
-            const response = await axios.get(`/board/${id}`)
-            const commentDtoList = response.data.commentDtosList
-            console.log(commentDtoList)
-            setCmList([commentDtoList,...cmList])
-        }
         loadComments()
-    },[id,cmList])
+    },[loadComments])
+
+    const aaa = (x)=>{
+        axios.delete(`/board/${id}/${x}`)
+        loadComments()
+    }
+    
+    const bbb = (x)=>{
+        axios.patch(`/board/${id}/${x}`,{
+            content:'수정댓글'
+        })
+    }
 
     return(
         <>
@@ -45,14 +58,14 @@ const Comment=({id})=>{
                 </div>
 
                 <div className='commentUl'>
-                    <div className="commentLi">
-                        <div>작성자</div>
-                        <div>댓글내용</div>
-                    </div>
-                    <div className="commentLi">
-                        <div>작성자</div>
-                        <div>댓글내용</div>
-                    </div>
+                    {cmList.map(({id,commentId,content})=>(
+                        <div key={id} className="commentLi">
+                            <div>{commentId}</div>
+                            <div>{content}</div>
+                            <button onClick={()=>aaa(id)}>삭제</button>
+                            <button onClick={()=>bbb(id)}>수정</button>
+                        </div>
+                    ))}
                 </div>
             </CommentWrap>
 

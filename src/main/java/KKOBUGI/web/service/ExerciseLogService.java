@@ -27,7 +27,18 @@ public class ExerciseLogService {
     /**
      * 저장
      */
-    public ExerciseLogDto.ExerciseLogResponseDto saveExerciseLog(ExerciseLogDto.ExerciseLogRequestDto exerciseLogRequestDtoDto,
+    public Long saveExerciseLog(ExerciseLogDto.ExerciseLogListDto listDto,
+                                                                 User user, int date) {
+        for(ExerciseLogDto.InnerData innerData: listDto.getList()) {
+            ExerciseLog exerciseLog = new ExerciseLog(innerData.getContent(), innerData.getDetailLog()
+                    , innerData.getNumber(), date, listDto.getTime(), user);
+            ExerciseLog savedExerciseLog = exerciseLogRepository.save(exerciseLog);
+        }
+
+
+        return listDto.userId;
+    }
+    /*public ExerciseLogDto.ExerciseLogResponseDto saveExerciseLog(ExerciseLogDto.ExerciseLogRequestDto exerciseLogRequestDtoDto,
                                                                  User user, int date) {
         ExerciseLog exerciseLog = new ExerciseLog(exerciseLogRequestDtoDto.getContent(), exerciseLogRequestDtoDto.getDetailLog(),
                 exerciseLogRequestDtoDto.getNumber(),
@@ -38,7 +49,7 @@ public class ExerciseLogService {
         ExerciseLogDto.ExerciseLogResponseDto exerciseLogResponseDto = exerciseLogToExerciseLogDto(savedExerciseLog);
 
         return exerciseLogResponseDto;
-    }
+    }*/
 
     /*
      * 수정

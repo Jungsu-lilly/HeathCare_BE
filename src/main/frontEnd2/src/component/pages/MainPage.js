@@ -65,20 +65,20 @@ const MainPage=()=>{
     /*console.log("12");*/
         const time = document.querySelectorAll('.digits')[0].innerText
                     + document.querySelectorAll('.digits')[1].innerText;
- const param = {
+/* const param = {
         	"userId" : '1',
         	"date"  : document.getElementById('date').value,
         	"time"   : time,
         	"content" : document.querySelector('.main-tit').value,
         	"detailLog" : document.querySelector('.sub-tit').value,
         	"number" : document.querySelector('.ex-count').value
-        }
-/*const param = {
+        }*/
+const param = {
             "userId" : id,
             "date" :  document.getElementById('date').value,
             "time" :  time,
             "list" :  getValue()
-        }*/
+        }
         axios.post(`/calendar/${dateFormat(date)}` , param)
         .then((res) => {
          alert("저장되었습니다.");

@@ -51,7 +51,9 @@
 <br><br>
 
 # API 명세서
-restful api 명세서는 wiki 페이지에 있습니다. 위키 페이지를 참고하시기 바랍니다.
+restful api 명세서는 해당 리포지토리의 wiki 페이지에 있습니다. 위키 페이지를 참고하시기 바랍니다.<br>
+
+https://github.com/Jungsu-lilly/HeathCare_BE/wiki/API-%EB%AA%85%EC%84%B8%EC%84%9C
 
 <br>
 

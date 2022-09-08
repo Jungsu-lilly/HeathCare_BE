@@ -21,7 +21,7 @@
 + #### exception handler 를 통한 예외처리 <br><br>
 ### 3. JPA를 통한 데이터베이스 구축 <br>
 ### 4. 테스트 코드 작성
-22.09.07 : JUnit4 단위테스트 작성
+22.09.07 : JUnit4 단위테스트 작성 시작. (User Class)
 <br><br>
 
 

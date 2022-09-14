@@ -11,12 +11,14 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import static org.junit.Assert.*;
 
+@WebAppConfiguration
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
@@ -51,21 +53,25 @@ public class UserServiceTest {
         fail("없는 유저입니다.");
     }
 
-    @Test(expected = NoUserIdException.class)
+    @Test
     public void 유저_삭제() throws Exception{
         User user = new User("id1","pw1","짱구");
         // 유저 저장
-        userService.save(user);
+        Long savedId = userService.save(user);
 
         // 유저 삭제
-        userService.delete(user);
-
-        User findUser = userService.findByloginId("id1");
-        fail("없는 유저를 조회");
+        Long deletedId = userService.delete(user);
+        assertEquals(savedId, deletedId);
     }
 
     @Test
     public void 유저정보_수정() throws Exception{
+        User user = new User("id1", "pw1", "넥네임1");
+        Long savedId = userService.save(user);
+        userService.update(savedId, "수정닉네임1");
 
+        User findUser = userService.findOne(savedId);
+
+        assertEquals(findUser.getNickname(),"수정닉네임1");
     }
 }

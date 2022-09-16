@@ -18,7 +18,6 @@ import javax.transaction.Transactional;
 
 import static org.junit.Assert.*;
 
-@WebAppConfiguration
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional

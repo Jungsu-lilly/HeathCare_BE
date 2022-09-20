@@ -31,7 +31,7 @@ public class BoardServiceTest {
     UserService userService;
 
     @Test
-    public void board_전체조회() throws Exception{
+    public void board_전체게시판_조회() throws Exception{
         mvc.perform(get("/board"))
                 .andExpect(status().isOk());
     }

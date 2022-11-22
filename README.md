@@ -57,10 +57,8 @@ restful api 명세서는 해당 리포지토리의 wiki 페이지에 있습니�
 
 https://github.com/Jungsu-lilly/HeathCare_BE/wiki/API-%EB%AA%85%EC%84%B8%EC%84%9C
 
-<br>
-<img width="1395" alt="스크린샷 2022-11-22 오후 11 57 45" src="https://user-images.githubusercontent.com/56336436/203346578-13e4d848-9c1c-4e9f-8079-233eac3df1e0.png">
 
 <br><br>
 ## ERD Diagram
-![healthProject (1)](https://user-images.githubusercontent.com/85045177/186178101-06fecd08-eed2-4867-bed4-2d861c06c32d.png) <br>
+<img width="1395" alt="스크린샷 2022-11-22 오후 11 57 45" src="https://user-images.githubusercontent.com/56336436/203346578-13e4d848-9c1c-4e9f-8079-233eac3df1e0.png"> <br>
 #### 테이블은 User, Board, Comment, ExerciseLog 총 네 개입니다.
